@@ -7,7 +7,7 @@
 
 Simulation models and hardware implementation (Simulink + C2000 and stand-alone C) for the manuscript:
 
-> **"Robust Regulation of Three-Phase AC/DC Converters: Stability and Experimental Validation"**
+> **"Robust Regulation of Three-Phase AC/DC Converters"**
 > *Rodolfo Verdín and Gerardo Flores*
 > *IEEE Transactions on Control Systems Technology*, manuscript 26-1303 (under revision).
 
@@ -67,10 +67,10 @@ and the feedforward $p_d^{eq}(g) = 2(E_m - R I(g))/v_o^d$, $p_q^{eq}(g) = -2 L \
 ├── Simulink_Simulation/       # Averaged model (1) in closed loop with (16), Section IV
 │   └── <model>.slx
 ├── Hardware_Implementation/   # Implementation used in the experiments, Section V
-│   ├── <model>.slx            # LAUNCHXL-F28379D model, code generation + External Mode
-│   ├── ctrl16.m               # Controller (16), MATLAB Function block
+│   ├── ThreephaseControl.slx  # LAUNCHXL-F28379D model, code generation + External Mode
+│   ├── ctrl16.m               # Controller (16), code of the MATLAB Function block in the model
 │   ├── params_tcst.m          # Experimental parameters (Tables IV–V, certified gains, PLL)
-│   ├── spll3ph_srf.m          # Discrete three-phase SRF-PLL, MATLAB Function block
+│   ├── spll3ph_srf.m          # SRF-PLL, code of the MATLAB Function block in the model
 │   └── spll_gains.m           # PLL gains from settling time and damping
 └── Embedded_Code/             # Reference C implementation of the control chain (CCS)
     ├── robust_controller.h    # Controller (16), forward Euler, Ts = 1e-4 s
@@ -93,7 +93,7 @@ Open the model in `Simulink_Simulation/` and run it. It simulates the averaged m
 
 ### Experiments (Section V)
 
-The experiments run on a LAUNCHXL-F28379D. The Simulink model in `Hardware_Implementation/` is the implementation: Embedded Coder generates and deploys the code (ADC → Clarke/Park → PLL → controller (16) → inverse Park → SVPWM at 10 kHz), and **External Mode** is used to monitor the signals and change the voltage reference in real time. `Embedded_Code/` contains a reference hand-written C version of the same control chain for Code Composer Studio (peripheral configuration not included).
+The experiments run on a LAUNCHXL-F28379D. The Simulink model `Hardware_Implementation/ThreephaseControl.slx` is the implementation: Embedded Coder generates and deploys the code (ADC → Clarke/Park → PLL → controller (16) → inverse Park → SVPWM at 10 kHz), and **External Mode** is used to monitor the signals and change the voltage reference in real time. `Embedded_Code/` contains a reference hand-written C version of the same control chain for Code Composer Studio (peripheral configuration not included).
 
 1. Run `Hardware_Implementation/params_tcst.m`. Choose the gains with `GAINS`:
    - `'tableV'`: gains of Table V (performance tuning, not covered by condition (18));
