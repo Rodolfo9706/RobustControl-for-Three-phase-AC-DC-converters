@@ -80,6 +80,33 @@ and the feedforward $p_d^{eq}(g) = 2(E_m - R I(g))/v_o^d$, $p_q^{eq}(g) = -2 L \
 
 ---
 
+## 🧰 Requirements
+
+### Simulink model and code generation (`Hardware_Implementation/`)
+
+- MATLAB and Simulink R2024a or later
+- MATLAB Coder, Simulink Coder and Embedded Coder (code generation for the target)
+- C2000 Microcontroller Blockset (ADC, ePWM and target support for the LAUNCHXL-F28379D)
+- Motor Control Blockset (PWM Reference Generator)
+- Simscape Electrical (abc→dq0 and dq0→αβ0 transforms). Equivalent transform blocks can be used instead, e.g. the C2000 Clarke, Park and Inverse Park Transformation blocks of the C2000 Microcontroller Blockset (TI DMC library) or the Clarke, Park and Inverse Park Transform blocks of the Motor Control Blockset, provided they use the same convention as model (1): amplitude-invariant transform with the $d$ axis aligned at the PLL angle
+- Texas Instruments Code Composer Studio (CCS) and C2000Ware, installed and linked through the C2000 Microcontroller Blockset **Hardware Setup**
+
+After installing the blockset, run the Hardware Setup (*Home → Add-Ons → Manage Add-Ons → C2000 Microcontroller Blockset → Setup*), select the TI Delfino F2837xD / LAUNCHXL-F28379D and give the paths to CCS and C2000Ware. To list the products required by the model on your installation:
+
+```matlab
+dependencies.toolboxDependencyAnalysis({'Hardware_Implementation/ThreephaseControl.slx'})
+```
+
+### Stand-alone C code (`Embedded_Code/`)
+
+- Texas Instruments Code Composer Studio (CCS) with the TI C2000 code generation tools (C28x compiler)
+- C2000Ware (driverlib and F2837xD device support: `F28x_Project.h`, `driverlib.h`, `device.h`)
+- LAUNCHXL-F28379D with its on-board XDS100v2 debug probe (drivers installed with CCS)
+
+Create a CCS project for the F28379D from a C2000Ware driverlib example, add the three files of `Embedded_Code/`, and add the ADC/ePWM configuration where indicated in `main_launchpad.c`.
+
+---
+
 ## 🚀 Quick Start
 
 ```bash
