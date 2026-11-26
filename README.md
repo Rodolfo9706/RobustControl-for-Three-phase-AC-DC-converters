@@ -8,7 +8,7 @@
 Simulation models and hardware implementation (Simulink + C2000 and stand-alone C) for the manuscript:
 
 > **"Robust Regulation of Three-Phase AC/DC Converters"**
-> *Rodolfo Verdín and Gerardo Flores*
+> *Rodolfo Isaac Verdín Monzón and Gerardo Flores*
 > *IEEE Transactions on Control Systems Technology*, manuscript 26-1303 (under revision).
 
 All code follows the notation and equation numbers of the revised manuscript.
@@ -82,6 +82,10 @@ and the feedforward $p_d^{eq}(g) = 2(E_m - R I(g))/v_o^d$, $p_q^{eq}(g) = -2 L \
 
 ## 🧰 Requirements
 
+### Simulations (`Simulink_Simulation/`)
+
+- MATLAB and Simulink R2024a or later (no additional toolboxes are needed for the averaged model)
+
 ### Simulink model and code generation (`Hardware_Implementation/`)
 
 - MATLAB and Simulink R2024a or later
@@ -104,6 +108,20 @@ dependencies.toolboxDependencyAnalysis({'Hardware_Implementation/ThreephaseContr
 - LAUNCHXL-F28379D with its on-board XDS100v2 debug probe (drivers installed with CCS)
 
 Create a CCS project for the F28379D from a C2000Ware driverlib example, add the three files of `Embedded_Code/`, and add the ADC/ePWM configuration where indicated in `main_launchpad.c`.
+
+---
+
+## 🔌 Experimental Setup
+
+| Component | Description |
+|---|---|
+| Controller board | TI LAUNCHXL-F28379D (C2000 Delfino), 10 kHz control and PWM |
+| Power stage | Three-phase IGBT bridge, 2.5 µs dead time |
+| Source | BLDC generator driven by a motor (trapezoidal back-EMF, ≈ 446 Hz) |
+| Line filter | $L$ = 2 mH, $R$ = 0.1 Ω per phase |
+| DC link | $C$ = 2.5 mF, resistive load $R_L$ = 45 Ω (plus switched load for disturbance tests) |
+| Current sensors | ACS712-05B (185 mV/A), with analog conditioning to the 0–3 V ADC range |
+| Voltage sensor | Resistive divider on the dc link |
 
 ---
 
